@@ -1,0 +1,29 @@
+{
+  "schemaVersion": 1,
+  "id": "crosshairmod",
+  "version": "${version}",
+  "name": "Crosshair Mod",
+  "description": "Crosshair Mod is a mod that changes the crosshair based on the action that can be preformed.",
+  "authors": [
+    "Zachary Orlando"
+  ],
+  "contact": {
+  },
+  "license": "MIT",
+  "icon": "assets/crosshairmod/icon.png",
+  "environment": "*",
+  "entrypoints": {
+    "main": [ "zaorlando.crosshairmod.CrosshairMod" ]
+  },
+  "mixins": [
+      "crosshairmod.mixins.json"
+  ],
+  "depends": {
+    "fabricloader": ">=0.11.6",
+    "fabric": "*",
+    "minecraft": "1.17.x",
+    "java": ">=16"
+  },
+  "suggests": {
+  }
+}
