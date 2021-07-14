@@ -13,12 +13,15 @@
   "icon": "assets/crosshairmod/icon.png",
   "environment": "*",
   "entrypoints": {
-    "main": [ "zaorlando.crosshairmod.CrosshairMod" ]
+    "main": [ "zaorlando.crosshairmod.CrosshairMod" ],
+    "modmenu": [ "zaorlando.crosshairmod.config.ModMenuIntegration" ]
   },
   "mixins": [
       "crosshairmod.mixins.json"
   ],
   "depends": {
+    "cloth-config2": ">=5.0.34",
+    "modmenu": ">=2.0.2",
     "fabricloader": ">=0.11.6",
     "fabric": "*",
     "minecraft": "1.17.x",

@@ -1,0 +1,7 @@
+{
+    "text.autoconfig.crosshairmod.title": "Crosshair Mod",
+    "text.autoconfig.crosshairmod.option.enableDot":    "Show Dot Crosshair",
+    "text.autoconfig.crosshairmod.option.enableBlock":  "Show Block Crosshair",
+    "text.autoconfig.crosshairmod.option.enableError":  "Show Error Crosshair",
+    "text.autoconfig.crosshairmod.option.enableAttack": "Show Attack Crosshair"
+}
