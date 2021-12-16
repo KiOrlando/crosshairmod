@@ -1,3 +1,5 @@
+## Crosshair Mod
+
 Inspired by [TheTellerverse's suggestion](https://new.reddit.com/r/minecraftsuggestions/comments/oi3w4g/crosshair_update/) on the Minecraft Suggestions subreddit.
 
 ![attack.gif](https://raw.githubusercontent.com/ZaOrlando/crosshairmod/main/attack.gif "attack.gif") 
