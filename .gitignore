@@ -19,3 +19,7 @@ bin/
 
 #fabric
 run/
+/remappedSrc/
+
+crosshairmod_client.launch
+crosshairmod_server.launch
