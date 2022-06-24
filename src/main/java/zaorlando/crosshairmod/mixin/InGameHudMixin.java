@@ -42,7 +42,7 @@ public abstract class InGameHudMixin
             // Draws the custom crosshair to the screen. This method call is
             // different to the vanilla call due to the different dimensions
             // of the texture files.
-            InGameHud.drawTexture(matrices, (this.scaledWidth - 15) / 2, (this.scaledHeight - 15) / 2, 0, 0, 15, 15, 15, 15);
+            InGameHud.drawTexture(matrices, x, y, 0, 0, 15, 15, 15, 15);
 
             // This needs to be called after the custom crosshair is rendered
             // to set the shader texture back to what it is expected to be.
@@ -51,7 +51,7 @@ public abstract class InGameHudMixin
         else
         {
             // Renders the vanilla crosshair when no custom crosshair is active.
-            inGameHud.drawTexture(matrices, x, y, 0, 0, 15, 15);
+            inGameHud.drawTexture(matrices, x, y, u, v, width, height);
         }
     }
 
