@@ -51,7 +51,7 @@ public abstract class InGameHudMixin
         else
         {
             // Renders the vanilla crosshair when no custom crosshair is active.
-            inGameHud.drawTexture(matrices, (this.scaledWidth - 15) / 2, (this.scaledHeight - 15) / 2, 0, 0, 15, 15);
+            inGameHud.drawTexture(matrices, x, y, 0, 0, 15, 15);
         }
     }
 
