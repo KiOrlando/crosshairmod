@@ -33,6 +33,9 @@ public abstract class InGameHudMixin
     @Redirect(method = "renderCrosshair", at = @At(value = "INVOKE", ordinal = 0, target = "Lnet/minecraft/client/gui/hud/InGameHud;drawTexture(Lnet/minecraft/client/util/math/MatrixStack;IIIIII)V"))
     private void crosshairmod$renderCrosshair(InGameHud inGameHud, MatrixStack matrices, int x, int y, int u, int v, int width, int height)
     {
+        var xNew = x;
+        var yNew = y;
+
         // Checks if a custom crosshair is supposed to be rendered and that the custom crosshair is not null.
         if(this.activeCrosshair != null && !this.shouldDisplayVanillaCrosshair)
         {
@@ -42,7 +45,7 @@ public abstract class InGameHudMixin
             // Draws the custom crosshair to the screen. This method call is
             // different to the vanilla call due to the different dimensions
             // of the texture files.
-            InGameHud.drawTexture(matrices, x, y, 0, 0, 15, 15, 15, 15);
+            InGameHud.drawTexture(matrices, xNew, yNew, 0, 0, 15, 15, 15, 15);
 
             // This needs to be called after the custom crosshair is rendered
             // to set the shader texture back to what it is expected to be.
@@ -51,7 +54,7 @@ public abstract class InGameHudMixin
         else
         {
             // Renders the vanilla crosshair when no custom crosshair is active.
-            inGameHud.drawTexture(matrices, x, y, u, v, width, height);
+            inGameHud.drawTexture(matrices, xNew, yNew, u, v, width, height);
         }
     }
 
