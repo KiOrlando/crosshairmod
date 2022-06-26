@@ -33,6 +33,8 @@ public abstract class InGameHudMixin
     @Redirect(method = "renderCrosshair", at = @At(value = "INVOKE", ordinal = 0, target = "Lnet/minecraft/client/gui/hud/InGameHud;drawTexture(Lnet/minecraft/client/util/math/MatrixStack;IIIIII)V"))
     private void crosshairmod$renderCrosshair(InGameHud inGameHud, MatrixStack matrices, int x, int y, int u, int v, int width, int height)
     {
+        // Here is a mixin magic happens, this needed to prevent crash
+        // when other mod modifies the target method arguments
         var xNew = x;
         var yNew = y;
 
