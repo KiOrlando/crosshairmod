@@ -1,5 +1,5 @@
 plugins {
-	id 'fabric-loom' version '0.10-SNAPSHOT'
+	id 'fabric-loom' version '1.0-SNAPSHOT'
 	id 'maven-publish'
 }
 
@@ -11,11 +11,8 @@ version = project.mod_version
 group = project.maven_group
 
 repositories {
-	maven { url "https://maven.shedaniel.me/" }
-	maven { url "https://maven.terraformersmc.com/" }	
-}
-
-minecraft {
+//	maven { url "https://maven.shedaniel.me/" }
+//	maven { url "https://maven.terraformersmc.com/" }
 }
 
 dependencies {

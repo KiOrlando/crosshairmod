@@ -7,6 +7,8 @@ import net.minecraft.client.gui.hud.InGameHud;
 import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.item.*;
+import net.minecraft.state.property.Properties;
+import net.minecraft.state.property.Property;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.hit.HitResult;
 import org.spongepowered.asm.mixin.Mixin;
@@ -70,18 +72,10 @@ public abstract class InGameHudMixin
 
             switch(target.getType())
             {
-                case MISS:
-                    setCrosshair(getPreferredMissCrosshair(client));
-                    break;
-                case ENTITY:
-                    setCrosshair(CrosshairType.ATTACK);
-                    break;
-                case BLOCK:
-                    setCrosshair(getPreferredBlockCrosshair(client, target));
-                    break;
-                default:
-                    this.shouldDisplayVanillaCrosshair = true;
-                    break;
+                case MISS   -> setCrosshair(getPreferredMissCrosshair(client));
+                case ENTITY -> setCrosshair(CrosshairType.ATTACK);
+                case BLOCK  -> setCrosshair(getPreferredBlockCrosshair(client, target));
+                default     -> this.shouldDisplayVanillaCrosshair = true;
             }
 
             // Check for the bow edge case. If detected,
@@ -92,7 +86,7 @@ public abstract class InGameHudMixin
     }
 
     /**
-     * A small helper function used to easily ashing the value of {@link InGameHudMixin#activeCrosshair}.
+     * A small helper function used to easily assigning the value of {@link InGameHudMixin#activeCrosshair}.
      * @param c A {@link CrosshairType} enum value that will be assigned to {@link InGameHudMixin#activeCrosshair}.
      */
     private void setCrosshair(CrosshairType c)
@@ -152,24 +146,25 @@ public abstract class InGameHudMixin
      */
     private CrosshairType getPreferredBlockCrosshair(MinecraftClient client, HitResult target)
     {
-        // The output variable is set to the error crosshair by default.
-        CrosshairType output = CrosshairType.ERROR;
-
         final ClientPlayerEntity player = client.player;
 
         // If the player is null then it can't be used below.
         // Return the output to prevent an exception.
         if(player == null)
-            return output;
+            return CrosshairType.ERROR;
 
         // Get the block the player is looking at.
         BlockState state = player.getWorld().getBlockState(((BlockHitResult)target).getBlockPos());
 
-        // Check if the player can mine the block they are looking at.
-        if(player.canHarvest(state) || player.isCreative())
-            output = CrosshairType.BLOCK;
+        // The player can mine whatever they are looking at if they are in creative
+        if(player.isCreative())
+            return CrosshairType.BLOCK;
 
-        // Return the output.
-        return output;
+        // Check if the player can mine the block they are looking at.
+        if(state.getBlock().getHardness() >= 0 && player.canHarvest(state))
+            return CrosshairType.BLOCK;
+
+        // Return for anything that happens to not pass any other cases.
+        return CrosshairType.ERROR;
     }
 }
