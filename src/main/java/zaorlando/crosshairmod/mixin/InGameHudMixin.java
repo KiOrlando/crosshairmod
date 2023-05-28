@@ -7,8 +7,6 @@ import net.minecraft.client.gui.hud.InGameHud;
 import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.item.*;
-import net.minecraft.state.property.Properties;
-import net.minecraft.state.property.Property;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.hit.HitResult;
 import org.spongepowered.asm.mixin.Mixin;
@@ -17,7 +15,6 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-import zaorlando.crosshairmod.CrosshairMod;
 import zaorlando.crosshairmod.CrosshairType;
 
 @Mixin(InGameHud.class)
@@ -33,7 +30,7 @@ public abstract class InGameHudMixin
     private CrosshairType activeCrosshair;
 
     @Redirect(method = "renderCrosshair", at = @At(value = "INVOKE", ordinal = 0, target = "Lnet/minecraft/client/gui/hud/InGameHud;drawTexture(Lnet/minecraft/client/util/math/MatrixStack;IIIIII)V"))
-    private void crosshairmod$renderCrosshair(InGameHud inGameHud, MatrixStack matrices, int x, int y, int u, int v, int width, int height)
+    private void crosshairmod$renderCrosshair(MatrixStack matrices, int x, int y, int u, int v, int width, int height)
     {
         // Checks if a custom crosshair is supposed to be rendered and that the custom crosshair is not null.
         if(this.activeCrosshair != null && !this.shouldDisplayVanillaCrosshair)
@@ -53,7 +50,7 @@ public abstract class InGameHudMixin
         else
         {
             // Renders the vanilla crosshair when no custom crosshair is active.
-            inGameHud.drawTexture(matrices, x, y, u, v, width, height);
+            InGameHud.drawTexture(matrices, x, y, u, v, width, height);
         }
     }
 
@@ -122,7 +119,8 @@ public abstract class InGameHudMixin
         // Check if the bow/crossbow is charged.
         // TODO: Maybe add an indicator when the bow is fully charged?
         if(toTest.isOf(Items.BOW))
-            return !player.getArrowType(toTest).isEmpty();
+            return false;
+//            return !player.getArrowType(toTest).isEmpty();
 
         if(toTest.isOf(Items.CROSSBOW))
             return CrossbowItem.isCharged(toTest);
@@ -158,13 +156,13 @@ public abstract class InGameHudMixin
 
         // The player can mine whatever they are looking at if they are in creative
         if(player.isCreative())
-            return CrosshairType.BLOCK;
+            return CrosshairType.BLOCK_HARVEST;
 
         // Check if the player can mine the block they are looking at.
         if(state.getBlock().getHardness() >= 0 && player.canHarvest(state))
-            return CrosshairType.BLOCK;
+            return CrosshairType.BLOCK_HARVEST;
 
         // Return for anything that happens to not pass any other cases.
-        return CrosshairType.ERROR;
+        return CrosshairType.BLOCK_NO_DROP;
     }
 }

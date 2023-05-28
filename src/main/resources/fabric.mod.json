@@ -13,7 +13,9 @@
   "icon": "assets/crosshairmod/icon.png",
   "environment": "*",
   "entrypoints": {
-    "main": [ "zaorlando.crosshairmod.CrosshairMod" ]
+    "main": [
+      "zaorlando.crosshairmod.Mod"
+    ]
   },
   "mixins": [
     "crosshairmod.mixins.json"
