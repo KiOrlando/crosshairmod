@@ -1,12 +1,14 @@
-package zaorlando.crosshairmod.mixin;
+package kiorlando.situational_crosshair.mixin;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.block.BlockState;
 import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.hud.InGameHud;
 import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.item.*;
+import net.minecraft.util.Identifier;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.hit.HitResult;
 import org.spongepowered.asm.mixin.Mixin;
@@ -15,7 +17,9 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-import zaorlando.crosshairmod.CrosshairType;
+import kiorlando.situational_crosshair.CrosshairType;
+
+import static net.minecraft.client.gui.hud.InGameHud.*;
 
 @Mixin(InGameHud.class)
 public abstract class InGameHudMixin
@@ -29,33 +33,31 @@ public abstract class InGameHudMixin
     private boolean shouldDisplayVanillaCrosshair;
     private CrosshairType activeCrosshair;
 
-    @Redirect(method = "renderCrosshair", at = @At(value = "INVOKE", ordinal = 0, target = "Lnet/minecraft/client/gui/hud/InGameHud;drawTexture(Lnet/minecraft/client/util/math/MatrixStack;IIIIII)V"))
-    private void crosshairmod$renderCrosshair(MatrixStack matrices, int x, int y, int u, int v, int width, int height)
+    @Redirect(method = "renderCrosshair", at = @At(value = "INVOKE", ordinal = 0, target = "Lnet/minecraft/client/gui/GuiGraphics;drawTexture(Lnet/minecraft/util/Identifier;IIIIII)V"))
+    private void situational_crosshair$renderCrosshair(GuiGraphics guiGraphics, Identifier texture, int x, int y, int u, int v, int width, int height)
     {
         // Checks if a custom crosshair is supposed to be rendered and that the custom crosshair is not null.
         if(this.activeCrosshair != null && !this.shouldDisplayVanillaCrosshair)
         {
-            // Sets the shader texture to the image of the custom crosshair.
-            RenderSystem.setShaderTexture(0, this.activeCrosshair.getIdentifier());
-            
             // Draws the custom crosshair to the screen. This method call is
             // different to the vanilla call due to the different dimensions
             // of the texture files.
-            InGameHud.drawTexture(matrices, x, y, 0, 0, 15, 15, 15, 15);
+			guiGraphics.drawTexture(this.activeCrosshair.getIdentifier(), x, y, 0, 0, 15, 15, 15, 15);
 
             // This needs to be called after the custom crosshair is rendered
             // to set the shader texture back to what it is expected to be.
-            RenderSystem.setShaderTexture(0, InGameHud.GUI_ICONS_TEXTURE);
+			// NOTE: As of Minecraft 1.20, this may no longer be needed.
+            RenderSystem.setShaderTexture(0, texture);
         }
         else
         {
             // Renders the vanilla crosshair when no custom crosshair is active.
-            InGameHud.drawTexture(matrices, x, y, u, v, width, height);
+			guiGraphics.drawTexture(texture, x, y, u, v, width, height);
         }
     }
 
-    @Inject(method = "tick()V", at = @At("TAIL"))
-    private void crosshairmod$tick(CallbackInfo ci)
+    @Inject(method = "tick(Z)V", at = @At("TAIL"))
+    private void situational_crosshair$tick(CallbackInfo ci)
     {
         MinecraftClient client = MinecraftClient.getInstance();
         HitResult target = client.crosshairTarget;

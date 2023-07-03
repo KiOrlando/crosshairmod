@@ -1,4 +1,4 @@
-package zaorlando.crosshairmod;
+package kiorlando.situational_crosshair;
 
 import net.minecraft.util.Identifier;
 

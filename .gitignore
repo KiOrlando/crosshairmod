@@ -1,5 +1,6 @@
 #Gradle
 .gradle/
+gradle/
 build/
 out/
 classes/
@@ -17,9 +18,6 @@ bin/
 .classpath
 .project
 
-#fabric
+#quilt
 run/
 /remappedSrc/
-
-crosshairmod_client.launch
-crosshairmod_server.launch
